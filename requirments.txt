@@ -1,0 +1,5 @@
+grequests
+xlrd
+bs4
+re
+xlwt
