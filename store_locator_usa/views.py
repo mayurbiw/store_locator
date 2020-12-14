@@ -1,11 +1,16 @@
+
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect, reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.core.mail import send_mail
+from django.conf import settings
+from .tasks import send_email_task
 
 import json
+import logging
 
 # Create your views here.
-
+ 
 # Create your views here.
 def index(request):
     if request.user.is_authenticated:  
@@ -39,16 +44,25 @@ def generate_report(request):
     return render(request, "store_locator_usa/generateReport.html", {"message": None})
 
 def create_report(request,brandname):
+    
+    print("creating a report for " + str(brandname) )
+    
     try:
-       print(brandname)
-    except:
-        data = {
-        "success": False
+        send_email_task.delay(str(brandname),request.user.email)
+        data  = {
+            "success": True
         }
+    
+    except:
+        data  = {
+            "success": False
+        }
+    
+    finally:
         return HttpResponse(json.dumps(data))
 
-    data  = {
-        "success": True
-    }
-    return HttpResponse(json.dumps(data))
+
+
+
+    
 

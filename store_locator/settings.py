@@ -9,8 +9,12 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+import os 
 
 from pathlib import Path
+
+email_pass =  os.environ.get("pass")
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -119,3 +123,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CELERY_BROKER_URL = 'amqp://localhost'
+
+#CELERY_ACCEPT_CONTENT = ['json']
+#CELERY_TASK_SERIALIZER = 'json'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'mayurbiw@gmail.com'
+EMAIL_HOST_PASSWORD = email_pass
+EMAIL_USE_TLS = True

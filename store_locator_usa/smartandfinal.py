@@ -1,8 +1,13 @@
+
+
 import sys
 import requests
 import xlwt
 import json
- 
+import grequests
+
+# at the beginning of the script
+
 
 def prepare_report(stores_dict):
     wb = xlwt.Workbook()
@@ -38,7 +43,8 @@ def prepare_report(stores_dict):
         row_index = row_index + 1 
             
     # saving the workbook
-    wb.save('Smart and Final.xls')
+    #wb.save('Smart and Final.xls')
+    return wb
 
 def getStores():
     url = 'https://www.smartandfinal.com/stores/'
@@ -54,11 +60,13 @@ def getStores():
 
     if (res.status_code!=200):
         print("Recieved unexcpected status code........")
+        return False
         
     else:
         temp_dict = json.loads(res.content)
         stores_dict = temp_dict['stores']
-        prepare_report(stores_dict)
+        wb = prepare_report(stores_dict)
+        return wb
         
-if __name__ == "__main__": 
+if __name__ == "__main__":
     getStores() 
