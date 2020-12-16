@@ -118,6 +118,15 @@ def handle_res(res,**kwargs):
     
     return None
 
+def handle_failed_requests(failed_requests):
+    retry = 0 
+    MAX_CONNECTIONS = 100
+    while(retry!=3 and len(failed_requests)>0):
+        retry = retry + 1
+        for x in range(0,len(failed_requests), MAX_CONNECTIONS):
+            rs = (grequests.get(u, hooks = {'response' : handle_res} ,stream=False) for u in failed_requests[x:x+MAX_CONNECTIONS])
+            grequests.map(rs,exception_handler=exception_handler)
+
 def starbucks_report_us():
 
     urls = []
@@ -133,7 +142,11 @@ def starbucks_report_us():
     for x in range(0,len(urls), MAX_CONNECTIONS):
         rs = (grequests.get(u, hooks = {'response' : handle_res} ,stream=False) for u in urls[x:x+MAX_CONNECTIONS])
         grequests.map(rs,exception_handler=exception_handler)
-        
+    
+    
+    if len(failed_requests) > 0:
+        print("retrying failed requests....")
+        handle_failed_requests(failed_requests)
     
     now = datetime.now()
     end_time = now.strftime("%H:%M:%S")
