@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from datetime import datetime
+from pathlib import Path 
 import requests
 import report_creator
 #from . import report_creator
@@ -7,8 +8,10 @@ from time import sleep
 import xlrd
 import xlwt
 
+
+LOC = Path(__file__).resolve().parent.parent / 'zip_code_details.xls'
+
 def get_lon_and_lat(zip_code):
-    LOC = ("/home/mayur/practice_projects/store_locator/zip_code_details.xls")
     wb = xlrd.open_workbook(LOC)
     sheet = wb.sheet_by_index(0)
     sheet.cell_value(0, 0)

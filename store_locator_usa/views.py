@@ -1,4 +1,4 @@
-
+import json
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect, reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -6,8 +6,6 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .tasks import send_email_task
 
-import json
-import logging
 
 # Create your views here.
  
@@ -17,12 +15,9 @@ def index(request):
         return HttpResponseRedirect(reverse("generate_report"))
 
     if request.method == 'POST':  
-        
         email = request.POST['InputEmail']
         password = request.POST['InputPassword']
-        
         user = authenticate(request, username=email, password=password)
-        
         if user is None:
             user = User.objects.create_user(
             username = email,

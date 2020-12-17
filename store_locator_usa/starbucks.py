@@ -4,6 +4,7 @@ import grequests
 import json
 import re
 import report_creator
+from pathlib import Path 
 import sys, os
 import time
 from time import sleep
@@ -15,7 +16,8 @@ all_stores_us_id_dict = {}
 failed_requests = []
 stores_dict_list = []
 
-LOC = ("/home/mayur/practice_projects/store_locator/zip_code_details.xls")
+LOC = Path(__file__).resolve().parent.parent / 'zip_code_details.xls'
+
 
 def prepare_urls(loc,urls):
 
@@ -124,6 +126,7 @@ def handle_failed_requests(failed_requests):
     while(retry!=3 and len(failed_requests)>0):
         retry = retry + 1
         for x in range(0,len(failed_requests), MAX_CONNECTIONS):
+            failed_requests.remove(failed_requests[x])
             rs = (grequests.get(u, hooks = {'response' : handle_res} ,stream=False) for u in failed_requests[x:x+MAX_CONNECTIONS])
             grequests.map(rs,exception_handler=exception_handler)
 
