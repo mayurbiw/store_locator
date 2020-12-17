@@ -25,8 +25,6 @@ def prepare_urls(loc,urls):
     Inputs : location of the Excel.
     Outputs: urls to process.  
     """
-    #f_urls = ['https://www.starbucks.com/store-locator?place=00601', 'https://www.starbucks.com/store-locator?place=01586', 'https://www.starbucks.com/store-locator?place=09470', 'https://www.starbucks.com/store-locator?place=09840', 'https://www.starbucks.com/store-locator?place=15339', 'https://www.starbucks.com/store-locator?place=22234', 'https://www.starbucks.com/store-locator?place=34020', 'https://www.starbucks.com/store-locator?place=53490', 'https://www.starbucks.com/store-locator?place=55581', 'https://www.starbucks.com/store-locator?place=71150']
-    
     wb = xlrd.open_workbook(loc)
     sheet = wb.sheet_by_index(0)
     sheet.cell_value(0, 0)
@@ -67,13 +65,15 @@ def handle_res(res,**kwargs):
         soup = BeautifulSoup(res.content, 'html.parser')
         all_script_tags = list(soup.select("body script"))
         
-        stores =  (str((all_script_tags[3])))
-        
-        #get the json that contains store details.
-        store_details = re.findall("(?s)(?<=window.__BOOTSTRAP = )(.*?)(?=window.__INTL_MESSAGES)", stores)
+        store_details = ''
+        for tag in all_script_tags:
+            result = re.search("(?s)(?<=window.__BOOTSTRAP = )(.*?)(?=window.__INTL_MESSAGES)",str(tag))
+            if result is not None:
+                store_details = str(result.group())
+                break
         
         # converting json respod into python dictionary.
-        store_details_dict = json.loads(str(store_details[0]))
+        store_details_dict = json.loads(str(store_details))
         
         #finding number of records returned by the api call 
         returned = stores_returned(store_details_dict)
