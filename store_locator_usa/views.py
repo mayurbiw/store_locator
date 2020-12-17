@@ -25,8 +25,6 @@ def index(request):
             email = email
             )
             user.save()
-            print(email)
-            print(password) 
             return HttpResponseRedirect(reverse("generate_report"))
 
         else:
@@ -39,20 +37,16 @@ def generate_report(request):
     return render(request, "store_locator_usa/generateReport.html", {"message": None})
 
 def create_report(request,brandname):
-    
     print("creating a report for " + str(brandname) )
-    
     try:
         send_email_task.delay(str(brandname),request.user.email)
         data  = {
             "success": True
         }
-    
     except:
         data  = {
             "success": False
         }
-    
     finally:
         return HttpResponse(json.dumps(data))
 

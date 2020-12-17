@@ -29,7 +29,6 @@ def getCity(state):
             cities_script_tag =  (str((all_script_tags[1])))
             print(state)
             cities = re.findall("(?s)(?<=stateJSON = )(.*?)(?=var vzwDL)", cities_script_tag)[0]
-            
             cities_details_dict = json.loads(cities[0:len(cities)-4])
             tried = 1
         for city in cities_details_dict['cities']:

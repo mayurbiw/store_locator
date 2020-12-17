@@ -4,7 +4,6 @@ import report_creator
 import sys
 import xlwt
 
-
 def get_stores():
     try:
         

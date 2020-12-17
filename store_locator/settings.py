@@ -11,9 +11,17 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os 
 
+import environ
+
 from pathlib import Path
 
 email_pass =  os.environ.get("pass")
+
+root = environ.Path(__file__) - 3  # get root of the project
+env = environ.Env()
+environ.Env.read_env()  # reading .env file
+
+SITE_ROOT = root()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,12 +32,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '1=g%$j-l1hb8yveu)9l3deeh9bnz)b&!y=*%u5^arl)7ey$7ix'
+SECRET_KEY = env.str('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -130,9 +139,9 @@ CELERY_BROKER_URL = 'amqp://localhost'
 #CELERY_TASK_SERIALIZER = 'json'
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'mayurbiw@gmail.com'
-EMAIL_HOST_PASSWORD = email_pass
-EMAIL_USE_TLS = True
+EMAIL_BACKEND = env.str('EMAIL_BACKEND')
+EMAIL_HOST = env.str('EMAIL_HOST')
+EMAIL_PORT = env.str('EMAIL_PORT')
+EMAIL_HOST_USER = env.str('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = env.str('EMAIL_USE_TLS')

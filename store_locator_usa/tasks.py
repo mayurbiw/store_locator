@@ -1,16 +1,14 @@
-
 from celery import shared_task 
 from time import sleep
 from io import BytesIO
-
 from django.core.mail import send_mail, EmailMessage
 from django.conf import settings
-
 from . import bk
 from . import pizza_hurt
 from . import smartandfinal
 from . import starbucks
 from . import verizon
+
 
 @shared_task
 def send_email_task(brandname,recipient_email):
