@@ -19,14 +19,16 @@ def index(request):
         password = request.POST['InputPassword']
         user = authenticate(request, username=email, password=password)
         if user is None:
-            user = User.objects.create_user(
-            username = email,
-            password = password,
-            email = email
-            )
-            user.save()
-            return HttpResponseRedirect(reverse("generate_report"))
-
+            try:
+                user = User.objects.create_user(
+                username = email,
+                password = password,
+                email = email
+                )
+                user.save()
+                return HttpResponseRedirect(reverse("generate_report"))
+            except:
+                return HttpResponse("Incorect password. user already created")
         else:
             login(request, user)  
             return HttpResponseRedirect(reverse("generate_report"))
