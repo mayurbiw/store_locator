@@ -15,7 +15,7 @@ urls = []
 failed_requests = []
 stores_dict_list = []
     
-def getCity(state):
+def get_city(state):
     tried = 0 
     try:
         while(tried == 0):
@@ -99,7 +99,7 @@ def get_stores():
     if res.status_code == 200:
         states = find_states(res)
         for state in states:
-            getCity(state)
+            get_city(state)
             
         for city in city_urls:
             url_city = f'https://www.verizon.com{city_urls[city]}'  
