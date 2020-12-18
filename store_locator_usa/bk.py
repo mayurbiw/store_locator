@@ -35,7 +35,7 @@ def get_stores():
                 #adding in main dictionary......
                 stores_dict_list.append(store_det)
         else:
-            print(f"Something went wtrong the returned status code = {res.status_code}")
+            print(f"Something went wrong the returned status code = {res.status_code}")
     
     except requests.exceptions.Timeout:
         print("----------Requests Timeout--------------")
